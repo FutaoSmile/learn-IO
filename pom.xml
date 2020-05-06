@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>org.example</groupId>
+    <artifactId>learn-imooc-netty</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <description>慕课网Netty学习</description>
+
+    <developers>
+        <developer>
+            <id>futao</id>
+            <email>1185172056@qq.com</email>
+            <roles>
+                <role>BE-dev</role>
+            </roles>
+            <url>https://www.jianshu.com/u/9e2e579df7dd</url>
+        </developer>
+    </developers>
+
+</project>
