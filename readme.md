@@ -27,3 +27,10 @@
 ![image.png](https://upload-images.jianshu.io/upload_images/1846623-ca834d2ccb22dbe9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 * 客户端: [Client.java](src/main/java/com/futao/learn/imooc/chatroom/nio/Client.java)
+    * 启动Socket，连接ServerSocket服务器。
+    * 连接成功后，开启一个新的线程来循环等待服务端发送的消息。（读线程与写线程分离，保证Socket客户端专门有一个单独的线程来读取服务端的消息，不会被写时间阻塞）
+    * 在`main`线程中循环获取用户输入的数据，并将数据通过socket发送到服务器。
+        * 因为服务器对每个客户端都有一个线程，所以服务器在接收到消息后，可以将消息转发给其他的Socket客户端。
+    * 当用户输入的数据为`quit`时，
+        * 服务端接收到内容为`quit`的数据，则关闭对应的socket连接。
+        * 客户端关闭socket连接。
