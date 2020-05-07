@@ -5,7 +5,7 @@
     * 服务端接收到消息后，响应相同的文本给客户端。
 
 
-### # 基于NIO的多人群发聊天室
+### # 基于NIO(Blocking I/O)的多人群发聊天室
 * 服务端: [ChatServer.java](src/main/java/com/futao/learn/imooc/chatroom/nio/ChatServer.java)
     * 创建`ServerSocket`实例，监听`8888`端口。
     * while循环等待客户端接入`serverSocket.accept()`。
@@ -34,3 +34,6 @@
     * 当用户输入的数据为`quit`时，
         * 服务端接收到内容为`quit`的数据，则关闭对应的socket连接。
         * 客户端关闭socket连接。
+        
+> ServerSocket.accept() 会一直阻塞，直到有客户端接入
+> InputStream.read()与OutputStream.write()也都会一直阻塞一个线程，直到输入和输出事件的发生。
