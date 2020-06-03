@@ -1,16 +1,16 @@
 ### # 使用ServerSocket与Socket实现消息收发
-* **服务端**: [ServerSocket.java](src/main/java/com/futao/learn/imooc/netty/MyServerSocket.java)
-* **客户端**: [Socket.java](src/main/java/com/futao/learn/imooc/netty/MyClientSocket.java)
+* **服务端**: [ServerSocket.java](src/main/java/com/futao/learn/imooc/chatroom/bio/threads/netty/MyServerSocket.java)
+* **客户端**: [Socket.java](src/main/java/com/futao/learn/imooc/chatroom/bio/threads/netty/MyClientSocket.java)
     * 读取用户在控制台输入的文本，发送给服务端。
     * 服务端接收到消息后，响应相同的文本给客户端。
 
 
 > 字节流：讲究Stream；字符流：讲究Reader，Writer
 
-### # 基于NIO(Blocking I/O)的多人群发聊天室
+### # 基于BIO(Blocking I/O)的多人群发聊天室
 * **服务端**: [ChatServer.java](src/main/java/com/futao/learn/imooc/chatroom/bio/ChatServer.java)
     * 创建`ServerSocket`实例，监听`8888`端口。
-    * while循环等待客户端接入`serverSocket.accept()`。
+    * 阻塞等待客户端接入`serverSocket.accept()`。while循环继续阻塞等待下一个客户端socket的接入
     * 当客户端接入，获取到客户端的socket连接。
         * 创建子线程完成下面的工作，主线程继续阻塞，等待新的socket连接注册。
         * 通过客户端socket的port标识每一个客户端。
@@ -41,3 +41,16 @@
 > InputStream.read()与OutputStream.write()也都会一直阻塞一个线程，直到输入和输出事件的发生。
 
 ### # NIO `NEW IO` OR `Non-Blocking IO`
+
+
+
+
+### # 其他
+* 网络编程的本质是进程间的通信。传输字节010101
+* Java io包
+    * 字节流: 
+        * *程序从其他地方*输入: `OutputStream`
+        * *程序*输出*到其他地方*: `InputStream`
+    * 字符流:
+        * *程序从其他地方*输入: `Reader`
+        * *程序*输出*到其他地方*: `Writer`

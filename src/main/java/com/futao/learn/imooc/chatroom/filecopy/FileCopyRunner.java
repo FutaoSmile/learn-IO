@@ -1,4 +1,4 @@
-package com.futao.learn.imooc.nio.filecopy;
+package com.futao.learn.imooc.chatroom.filecopy;
 
 import java.io.File;
 

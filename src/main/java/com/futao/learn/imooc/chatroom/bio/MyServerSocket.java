@@ -1,4 +1,6 @@
-package com.futao.learn.imooc.netty;
+package com.futao.learn.imooc.chatroom.bio;
+
+import com.futao.learn.imooc.chatroom.bio.MyClientSocket;
 
 import java.io.*;
 import java.net.ServerSocket;
@@ -19,7 +21,7 @@ public class MyServerSocket {
         try (ServerSocket serverSocket = new ServerSocket(SERVER_PORT)) {
             System.out.println("服务端启动，端口:" + serverSocket.getLocalPort());
             while (true) {
-                //线程将阻塞，知道有客户端进行连接
+                //线程将阻塞，直到有客户端进行连接
                 Socket socket = serverSocket.accept();
                 System.out.println("接收到客户端请求." + socket.getPort());
                 BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream(), StandardCharsets.UTF_8));

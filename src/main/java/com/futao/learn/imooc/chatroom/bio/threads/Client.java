@@ -1,4 +1,4 @@
-package com.futao.learn.imooc.chatroom.bio;
+package com.futao.learn.imooc.chatroom.bio.threads;
 
 import com.futao.learn.imooc.chatroom.Const;
 import lombok.extern.slf4j.Slf4j;

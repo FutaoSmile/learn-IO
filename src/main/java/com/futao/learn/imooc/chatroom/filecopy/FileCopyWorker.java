@@ -1,4 +1,4 @@
-package com.futao.learn.imooc.nio.filecopy;
+package com.futao.learn.imooc.chatroom.filecopy;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -98,19 +98,29 @@ public class FileCopyWorker {
                 readOptions.add(StandardOpenOption.READ);
 
                 HashSet<OpenOption> writeOptions = new HashSet<>();
-                writeOptions.add(StandardOpenOption.READ);
+                //可读
+//                writeOptions.add(StandardOpenOption.READ);
+                //可写(覆盖)
+//                writeOptions.add(StandardOpenOption.WRITE);
+                //可写(追加)
+                writeOptions.add(StandardOpenOption.APPEND);
+                //如果不存在则创建
+                writeOptions.add(StandardOpenOption.CREATE);
 
 
                 try (FileChannel readChannel = FileChannel.open(source.toPath(), readOptions);
                      FileChannel writeChannel = FileChannel.open(target.toPath(), writeOptions)) {
                     //缓冲区(byteBuffer有写模式与读模式，要注意模式的转换)
-                    ByteBuffer byteBuffer = ByteBuffer.allocate(1024);
-                    int size;
+                    ByteBuffer byteBuffer = ByteBuffer.allocate(1024 * 8);
                     //从通道readChannel读取数据，写到buffer
-                    while ((size = readChannel.read(byteBuffer)) != -1) {
+                    while (readChannel.read(byteBuffer) != -1) {
                         byteBuffer.flip();
-                        //从buffer读取数据，写到writeChannel
-                        writeChannel.write(byteBuffer);
+
+                        //如果有数据
+                        while (byteBuffer.hasRemaining()) {
+                            //从buffer读取数据，写到writeChannel
+                            writeChannel.write(byteBuffer);
+                        }
 
                         byteBuffer.clear();
                     }
