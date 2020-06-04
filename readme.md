@@ -41,8 +41,22 @@
 > InputStream.read()与OutputStream.write()也都会一直阻塞一个线程，直到输入和输出事件的发生。
 
 ### # NIO `NEW IO` OR `Non-Blocking IO`
-
-
+* 核心概念&参数：
+    * ByteBuffer 缓冲区
+    * 写模式/读模式
+    * position
+    * limit
+    * capacity
+    * flip()
+* 过程:
+    1. 写模式下position指针刚开始指向position=0的位置，limit=capacity=缓冲区大小。
+    2. 向缓冲区写入数据，position向下移动指针。
+    3. 调用flip()，将缓冲区从写模式变更成读模式，同时position=0，limit指向写入数据的末尾。
+    4. 开始读取数据，position指针随着数据的读取向下移动，直到到达limit。
+    5. clear()/compact()。
+        * clear()会清空整个缓冲区的数据
+        * 而compact()只会清空
+    
 
 
 ### # 其他

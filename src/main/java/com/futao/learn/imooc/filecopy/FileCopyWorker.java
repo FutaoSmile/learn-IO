@@ -1,4 +1,4 @@
-package com.futao.learn.imooc.chatroom.filecopy;
+package com.futao.learn.imooc.filecopy;
 
 import lombok.extern.slf4j.Slf4j;
 
