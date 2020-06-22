@@ -10,11 +10,20 @@ import java.net.UnknownHostException;
  * @author futao
  * @date 2020/5/6
  */
-public class MyClientSocket {
+public class MyClientSocket implements Runnable {
 
     public static final String QUIT_KEY_WORD = "quit";
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
+        Thread thread = new Thread(new MyClientSocket());
+        thread.start();
+
+        Thread.sleep(2000L);
+        System.out.println(thread.getState());
+    }
+
+    @Override
+    public void run() {
         try (Socket socket = new Socket("127.0.0.1", MyServerSocket.SERVER_PORT)) {
             BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
