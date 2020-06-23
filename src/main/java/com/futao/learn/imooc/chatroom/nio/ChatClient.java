@@ -2,14 +2,12 @@ package com.futao.learn.imooc.chatroom.nio;
 
 import com.futao.learn.imooc.chatroom.Const;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
-import java.nio.channels.SelectionKey;
-import java.nio.channels.Selector;
-import java.nio.channels.ServerSocketChannel;
-import java.nio.channels.SocketChannel;
+import java.nio.channels.*;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
@@ -20,7 +18,7 @@ import java.util.Set;
  * @date 2020/6/22
  */
 @Slf4j
-public class Client {
+public class ChatClient {
 
 
     private SocketChannel socketChannel;
@@ -32,8 +30,6 @@ public class Client {
     private ByteBuffer writeByteBuffer = ByteBuffer.allocate(1024);
 
     private static final Charset CHAR_SET = StandardCharsets.UTF_8;
-
-    private static final Thread MAIN_THREAD = Thread.currentThread();
 
     public void start() throws IOException {
         selector = Selector.open();
@@ -47,7 +43,13 @@ public class Client {
         socketChannel.register(selector, SelectionKey.OP_CONNECT);
 
         while (true) {
-            int triggerChannelCount = selector.select();
+            int triggerChannelCount = 0;
+            try {
+                triggerChannelCount = selector.select();
+            } catch (ClosedSelectorException e) {
+                log.info("用户正常退出...");
+                break;
+            }
             if (triggerChannelCount == 0) {
                 continue;
             }
@@ -60,7 +62,6 @@ public class Client {
                         channel.finishConnect();
                         //处理用户的输入
                         new Thread(() -> {
-                            inner:
                             while (true) {
                                 Scanner scanner = new Scanner(System.in);
                                 String msg = scanner.nextLine();
@@ -74,8 +75,7 @@ public class Client {
                                     //下线
                                     if (Const.EXIT_KEY_WORD.equals(msg)) {
                                         selector.close();
-//                                        MAIN_THREAD.interrupt();
-                                        break inner;
+                                        break;
                                     }
                                 } catch (IOException e) {
                                     e.printStackTrace();
@@ -90,6 +90,11 @@ public class Client {
                     }
                     readByteBuffer.flip();
                     String msg = String.valueOf(CHAR_SET.decode(readByteBuffer));
+                    if (StringUtils.isBlank(msg)) {
+                        //服务器异常，=====>测试发现，如果服务器被直接关关闭，会出现isReadable()事件一直触发的问题
+                        selector.close();
+                        log.info("服务器异常，系统结束");
+                    }
                     log.info("接收到消息:[{}]", msg);
                     readByteBuffer.clear();
                 }
@@ -100,8 +105,12 @@ public class Client {
 
 
     public static void main(String[] args) throws IOException {
-        Client client = new Client();
-        client.start();
+        ChatClient chatClient = new ChatClient();
+        try {
+            chatClient.start();
+        } catch (Exception e) {
+            System.out.println(e);
+        }
     }
 
 }

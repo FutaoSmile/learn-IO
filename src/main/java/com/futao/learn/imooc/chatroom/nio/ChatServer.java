@@ -2,6 +2,7 @@ package com.futao.learn.imooc.chatroom.nio;
 
 import com.futao.learn.imooc.chatroom.Const;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -112,6 +113,17 @@ public class ChatServer {
                 //从缓冲区中读取数据客户端发送的数据
                 String msg = String.valueOf(CHAR_SET.decode(readByteBuffer));
                 log.info("接收到客户端[{}]发来消息[{}]", socketChannel.socket().getPort(), msg);
+
+                if (StringUtils.isBlank(msg)) {
+                    //客户端异常，=====>测试发现，如果客户端被直接关闭，会出现isReadable()事件一直触发的问题
+                    log.info("客户端[{}]异常，即将剔除", 1);
+                    //断开当前注册的selector上的触发当前事件的channel连接
+                    int clientPort = ((SocketChannel) selectionKey.channel()).socket().getPort();
+                    selectionKey.cancel();
+                    log.info("客户端[{}]下线", clientPort);
+                    //因为发生了监听事件和channel的变更，所以需要通知selector重新整理selector所监听的事件
+                    selector.wakeup();
+                }
 
                 //判断是否是退出
                 if (Const.EXIT_KEY_WORD.equals(msg)) {
