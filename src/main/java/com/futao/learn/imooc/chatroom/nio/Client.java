@@ -33,6 +33,8 @@ public class Client {
 
     private static final Charset CHAR_SET = StandardCharsets.UTF_8;
 
+    private static final Thread MAIN_THREAD = Thread.currentThread();
+
     public void start() throws IOException {
         selector = Selector.open();
 
@@ -44,7 +46,11 @@ public class Client {
         //成功建立连接
         socketChannel.register(selector, SelectionKey.OP_CONNECT);
 
-        while (selector.select() > 0) {
+        while (true) {
+            int triggerChannelCount = selector.select();
+            if (triggerChannelCount == 0) {
+                continue;
+            }
             Set<SelectionKey> selectionKeys = selector.selectedKeys();
             for (SelectionKey selectionKey : selectionKeys) {
                 if (selectionKey.isConnectable()) {
@@ -54,17 +60,22 @@ public class Client {
                         channel.finishConnect();
                         //处理用户的输入
                         new Thread(() -> {
+                            inner:
                             while (true) {
                                 Scanner scanner = new Scanner(System.in);
                                 String msg = scanner.nextLine();
+                                writeByteBuffer.clear();
                                 writeByteBuffer.put(CHAR_SET.encode(msg));
                                 writeByteBuffer.flip();
                                 try {
-                                    channel.write(writeByteBuffer);
-                                    writeByteBuffer.clear();
+                                    while (writeByteBuffer.hasRemaining()) {
+                                        channel.write(writeByteBuffer);
+                                    }
+                                    //下线
                                     if (Const.EXIT_KEY_WORD.equals(msg)) {
-                                        socketChannel.close();
-                                        return;
+                                        selector.close();
+//                                        MAIN_THREAD.interrupt();
+                                        break inner;
                                     }
                                 } catch (IOException e) {
                                     e.printStackTrace();
@@ -84,7 +95,6 @@ public class Client {
                 }
             }
             selectionKeys.clear();
-
         }
     }
 
