@@ -17,9 +17,6 @@ public class MyClientSocket implements Runnable {
     public static void main(String[] args) throws InterruptedException {
         Thread thread = new Thread(new MyClientSocket());
         thread.start();
-
-        Thread.sleep(2000L);
-        System.out.println(thread.getState());
     }
 
     @Override
