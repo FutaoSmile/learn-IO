@@ -4,12 +4,10 @@
 
 * 类型
     * DirectByteBuffer
-        * 直接内存
         * 使用的是操作系统级别的内存DirectByteBuffer，分配比较慢，但是数据的读写比较快，因为少了一次从系统内存到JVM内存的复制过程
         * 初始化方法:
             * `ByteBuffer.allocateDirect(1024 * 4);`
     * HeapByteBuffer
-        * 对内存
         * 使用的是JVM的堆内存HeapByteBuffer，对于JVM来说，分配比较快，但是读写比较慢，因为需要将操作系统内存里的数据复制到JVM内存
         * 初始化方法:
             * `ByteBuffer.allocate(1024 * 4);`
@@ -36,7 +34,7 @@
             * 将`position`设置为`0`，即从`ByteBuffer`起始位置开始读。
             * 将`limit`设置为写模式下`position`的值，即最大可读取的数据量大小。
     * `mark()`
-        * 标记当前位置
+        * 标记当前`position`位置
     * `reset()`
         * 将`position`指向上一次`mark()`所指向的位置，可以从这个位置重复向下读取数据
     * `clear()`
@@ -45,9 +43,9 @@
             * 将`limit`设置为`capacity`
             * `position`指向起始位置`0`
             * 提示：实际上数据并未清理，只是下次是从0的位置开始写入数据，效果上像是数据清空了。
-            * 提示：如果ByteBuffer中的数据并未完全读完，调用这个方法将忽略那些未读取的数据。
+            * 提示：如果`ByteBuffer`中的数据并未完全读完，调用这个方法将忽略那些未读取的数据。
     * `compact()`
-        * 如果并未读取完`ByteBuffer`中的数据，调用`compact()`会将`position~limit`之间的数据拷贝到ByteBuffer的起始处，并且position为剩余数据量的大小，下次再往ByteBuffer中写入数据时，将position继续往下写，不会覆盖历史数据。
+        * 如果并未读取完`ByteBuffer`中的数据，调用`compact()`会将`position~limit`之间的数据拷贝到`ByteBuffer`的起始处，并且`position`为剩余数据量的大小，下次再往`ByteBuffer`中写入数据时，将在`position`位置继续往下写，不会覆盖历史数据。
     * `hasRemaining()`
         * 判断缓冲区中是否还有未读数据
         

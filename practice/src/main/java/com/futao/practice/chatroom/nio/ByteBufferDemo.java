@@ -8,8 +8,10 @@ import java.nio.channels.FileChannel;
 import java.util.zip.ZipOutputStream;
 
 /**
+ * ByteBuffer的代码演示
+ *
  * @author futao
- * @date 2020/7/8
+ * @date 2020/7/7
  */
 public class ByteBufferDemo {
     public static void main(String[] args) {
