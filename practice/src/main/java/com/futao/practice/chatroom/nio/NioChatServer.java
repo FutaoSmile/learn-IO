@@ -63,6 +63,12 @@ public class NioChatServer {
         }
     }
 
+    /**
+     * 事件处理器
+     *
+     * @param selectionKey 触发的事件信息
+     * @param selector     多路复用器
+     */
     private void selectionKeyHandler(SelectionKey selectionKey, Selector selector) {
         if (selectionKey.isAcceptable()) {
             //如果触发的是SocketChannel接入事件
@@ -84,8 +90,8 @@ public class NioChatServer {
             //创建缓冲区
             ByteBuffer byteBuffer = ByteBuffer.allocate(1024 * 4);
             try {
-                //将通道上的数据写入缓冲区
-                while (socketChannel.write(byteBuffer) > 0) {
+                // 读取通道上的数据写入缓冲区(返回0或者-1说明读到了末尾)
+                while (socketChannel.read(byteBuffer) > 0) {
                 }
                 //切换为读模式
                 byteBuffer.flip();

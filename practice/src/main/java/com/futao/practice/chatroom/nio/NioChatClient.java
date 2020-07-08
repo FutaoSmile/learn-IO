@@ -91,7 +91,7 @@ public class NioChatClient {
                             // 获取用户输入的文本
                             String message = new Scanner(System.in).nextLine();
                             // 将数据写入缓冲区
-                            byteBuffer.put("卧槽".getBytes(Constants.CHARSET));
+                            byteBuffer.put(message.getBytes(Constants.CHARSET));
                             // 将缓冲区设置为读模式
                             byteBuffer.flip();
                             try {
@@ -117,7 +117,7 @@ public class NioChatClient {
             ByteBuffer byteBuffer = ByteBuffer.allocate(1024 * 4);
             try {
                 //将通道上的数据写入缓冲区(返回0或者-1说明读到了末尾)
-                while (socketChannel.write(byteBuffer) > 0) {
+                while (socketChannel.read(byteBuffer) > 0) {
                 }
                 log.info("接收到数据:[{}]", Constants.CHARSET.decode(byteBuffer));
             } catch (IOException e) {
