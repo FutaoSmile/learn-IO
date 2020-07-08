@@ -4,11 +4,11 @@
 
 * 类型
     * DirectByteBuffer
-        * 使用的是操作系统级别的内存DirectByteBuffer，分配比较慢，但是数据的读写比较快，因为少了一次从系统内存到JVM内存的复制过程
+        * 使用的是操作系统级别的内存，分配比较慢，但是数据的读写比较快，因为少了一次从系统内存到JVM内存的复制过程
         * 初始化方法:
             * `ByteBuffer.allocateDirect(1024 * 4);`
     * HeapByteBuffer
-        * 使用的是JVM的堆内存HeapByteBuffer，对于JVM来说，分配比较快，但是读写比较慢，因为需要将操作系统内存里的数据复制到JVM内存
+        * 使用的是JVM的堆内存，对于JVM来说，分配比较快，但是读写比较慢，因为需要将操作系统内存里的数据复制到JVM内存
         * 初始化方法:
             * `ByteBuffer.allocate(1024 * 4);`
 
@@ -51,7 +51,7 @@
         
 * 将数据写入ByteBuffer的方式
     * `byteBuffer.put(x)`
-    * `channel.write(byteBuffer)`
+    * `channel.read(byteBuffer)`
 * 从ByteBuffer中读取数据的方式
     * `byteBuffer.get()`
-    * `channel.read(bytebuffer)`
+    * `channel.write(bytebuffer)`
