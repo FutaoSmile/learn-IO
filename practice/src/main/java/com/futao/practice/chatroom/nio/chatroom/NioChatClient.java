@@ -1,4 +1,4 @@
-package com.futao.practice.chatroom.nio;
+package com.futao.practice.chatroom.nio.chatroom;
 
 import com.futao.practice.chatroom.bio.Constants;
 import lombok.Getter;
@@ -14,7 +14,6 @@ import java.util.Scanner;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 /**
  * 基于NIO实现的群聊客户端
@@ -26,6 +25,8 @@ import java.util.concurrent.TimeUnit;
 @Setter
 @Slf4j
 public class NioChatClient {
+
+    // TODO: 2020/7/9  USER_INPUT_HANDLER 线程无法停止
 
     /**
      * 用于处理用户输入数据的单个线程线程池，使用线程池是为了便于关闭
