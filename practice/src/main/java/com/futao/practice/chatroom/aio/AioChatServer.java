@@ -19,7 +19,7 @@ import java.util.concurrent.Executors;
  * @date 2020/7/13
  */
 @Slf4j
-public class ChatServer {
+public class AioChatServer {
 
     // TODO: 2020/7/13 AIO就是基于通知和事件回调 eg: Future.get()或者CompletionHandler回调
 
@@ -29,7 +29,6 @@ public class ChatServer {
         try {
             // 资源组
             AsynchronousChannelGroup asynchronousChannelGroup = AsynchronousChannelGroup.withThreadPool(THREAD_POOL);
-
             AsynchronousServerSocketChannel asynchronousServerSocketChannel = AsynchronousServerSocketChannel.open(asynchronousChannelGroup);
             asynchronousServerSocketChannel.bind(new InetSocketAddress("localhost", Constants.SERVER_PORT));
             log.debug("服务器启动成功");
@@ -37,18 +36,29 @@ public class ChatServer {
             while (true) {
                 asynchronousServerSocketChannel.accept(new Object(), new CompletionHandler<AsynchronousSocketChannel, Object>() {
                     @Override
-                    public void completed(AsynchronousSocketChannel result, Object attachment) {
-//                        log.debug("客户端[{}]接入成功",result.);
+                    public void completed(AsynchronousSocketChannel asynchronousSocketChannel, Object attachment) {
+                        try {
+                            log.debug("客户端[{}]接入成功", ((InetSocketAddress) asynchronousSocketChannel.getRemoteAddress()).getPort());
+
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     }
 
                     @Override
                     public void failed(Throwable exc, Object attachment) {
-
+                        log.error("客户端接入失败", exc);
                     }
                 });
+                System.in.read();
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+
+    public static void main(String[] args) {
+        new AioChatServer().start();
     }
 }

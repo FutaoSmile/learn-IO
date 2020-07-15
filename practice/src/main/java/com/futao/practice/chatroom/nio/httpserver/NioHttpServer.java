@@ -17,6 +17,8 @@ import java.nio.file.Paths;
 import java.util.Set;
 
 /**
+ * NIO实现HTTP服务器
+ *
  * @author futao
  * @date 2020/7/10
  */
@@ -30,14 +32,12 @@ public class NioHttpServer {
      */
     private static final String STATIC_RESOURCE_PATH = System.getProperty("user.dir") + "/practice/src/main/resources/pages/";
 
-
     /**
      * 响应的基础信息
      */
     public static final String BASIC_RESPONSE = "HTTP/1.1 200 OK\r\n" +
             "Content-Type: text/html;charset=utf-8\r\n" +
             "Vary: Accept-Encoding\r\n";
-
 
     /**
      * 回车换行符
